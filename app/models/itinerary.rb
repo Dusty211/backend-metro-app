@@ -1,3 +1,3 @@
 class Itinerary < ApplicationRecord
-  has_many :arrivals
+  has_many :arrivals, dependent: :destroy
 end
