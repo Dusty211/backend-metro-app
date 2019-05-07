@@ -10,6 +10,7 @@ class CreateItineraries < ActiveRecord::Migration[5.2]
       t.float :peak_fare
       t.float :off_peak_fare
       t.float :senior_fare
+      t.datetime :arrivals_updated
 
       t.timestamps
     end

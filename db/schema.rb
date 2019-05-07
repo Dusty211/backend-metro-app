@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2019_05_07_171513) do
     t.float "peak_fare"
     t.float "off_peak_fare"
     t.float "senior_fare"
+    t.datetime "arrivals_updated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
