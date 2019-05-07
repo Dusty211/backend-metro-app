@@ -19,6 +19,9 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'rack-cors'
 gem 'active_model_serializers'
 
+# external api
+gem 'rest-client'
+
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
 
