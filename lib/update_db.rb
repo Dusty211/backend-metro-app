@@ -2,39 +2,28 @@ require 'station_converter'
 
 class UpdateDb
 
-  include StationConverter
+  extend StationConverter
 
   def initialize(source_code, destination_code)
     @source = source_code
     @destination = destination_code
   end
-
+  #return_data is now a class method
   def test_arrivals
     return_data(arrivals_url)
   end
-
+  #return_data is now a class method
   def itinerary_data
     return_data(itinerary_url)
   end
 
+  #won't work now because StationConverter is extended instead of included
   def source_name
     self.to_station_name(@source)
   end
-
+  #won't work now because StationConverter is extended instead of included
   def destination_name
     self.to_station_name(@destination)
-  end
-
-  def all_itinerary_data
-    return_data(all_itinerary_url)
-  end
-
-  def all_platforms
-    return_data(stations_url)
-  end
-
-  def testfunction
-    all_itinerary_data
   end
 
   def self.seed_source_platforms
@@ -53,7 +42,7 @@ class UpdateDb
 
   private
 
-  def api_key
+  def self.api_key
     return Rails.application.credentials.wmata[:primary_key]
   end
 
@@ -66,16 +55,26 @@ class UpdateDb
   end
 
   #Dev use:
-  def all_itinerary_url
+  def self.all_itinerary_url
     return "https://api.wmata.com/Rail.svc/json/jSrcStationToDstStationInfo?api_key=#{api_key}"
   end
-  ###
 
-  def stations_url
+  def self.stations_url
     return "https://api.wmata.com/Rail.svc/json/jStations?api_key=#{api_key}"
   end
 
-  def return_data(url)
+  def self.all_itinerary_data
+    return_data(all_itinerary_url)["StationToStationInfos"]
+  end
+
+  def self.all_platforms
+    return_data(stations_url)["Stations"]
+  end
+
+  ##########
+
+
+  def self.return_data(url)
     response = RestClient.get(url)
     return JSON.parse(response)
   end
