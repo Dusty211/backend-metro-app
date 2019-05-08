@@ -1,5 +1,6 @@
 class Platform < ApplicationRecord
-  belongs_to :itinerary
+  has_many :itineraries, dependent: :destroy
+  has_many :arrivals, dependent: :destroy
   has_many :lines, dependent: :destroy
   has_one :address, dependent: :destroy
 end

@@ -1,3 +1,3 @@
 class Arrival < ApplicationRecord
-  belongs_to :itinerary
+  belongs_to :platform
 end
