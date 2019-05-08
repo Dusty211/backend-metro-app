@@ -37,6 +37,10 @@ class UpdateDb
     all_itinerary_data
   end
 
+  def self.seed_source_platforms
+    byebug
+  end
+
 
   # Dev use:
   # def print_converter
