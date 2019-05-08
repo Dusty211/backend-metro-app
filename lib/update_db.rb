@@ -13,7 +13,7 @@ class UpdateDb
     return_data(arrivals_url)
   end
 
-  def test_itinerary
+  def itinerary_data
     return_data(itinerary_url)
   end
 
@@ -24,6 +24,19 @@ class UpdateDb
   def destination_name
     self.to_station_name(@destination)
   end
+
+  def all_itinerary_data
+    return_data(all_itinerary_url)
+  end
+
+  def all_platforms
+    return_data(stations_url)
+  end
+
+  def testfunction
+    all_itinerary_data
+  end
+
 
   # Dev use:
   # def print_converter
@@ -48,10 +61,15 @@ class UpdateDb
     return "https://api.wmata.com/Rail.svc/json/jSrcStationToDstStationInfo?api_key=#{api_key}&FromStationCode=#{@source}&ToStationCode=#{@destination}"
   end
 
-  # Dev use:
-  # def stations_url
-  #   return "https://api.wmata.com/Rail.svc/json/jStations?api_key=#{api_key}"
-  # end
+  #Dev use:
+  def all_itinerary_url
+    return "https://api.wmata.com/Rail.svc/json/jSrcStationToDstStationInfo?api_key=#{api_key}"
+  end
+  ###
+
+  def stations_url
+    return "https://api.wmata.com/Rail.svc/json/jStations?api_key=#{api_key}"
+  end
 
   def return_data(url)
     response = RestClient.get(url)
