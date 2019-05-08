@@ -32,25 +32,24 @@ ActiveRecord::Schema.define(version: 2019_05_08_181949) do
     t.string "destination_name"
     t.string "line"
     t.string "minutes"
-    t.bigint "itinerary_id"
+    t.bigint "platform_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["itinerary_id"], name: "index_arrivals_on_itinerary_id"
+    t.index ["platform_id"], name: "index_arrivals_on_platform_id"
   end
 
   create_table "itineraries", force: :cascade do |t|
     t.string "source_code"
-    t.string "source_name"
     t.string "destination_code"
-    t.string "destination_name"
     t.float "miles"
     t.integer "time"
     t.float "peak_fare"
     t.float "off_peak_fare"
     t.float "senior_fare"
-    t.datetime "arrivals_updated"
+    t.bigint "platform_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["platform_id"], name: "index_itineraries_on_platform_id"
   end
 
   create_table "lines", force: :cascade do |t|
@@ -64,17 +63,17 @@ ActiveRecord::Schema.define(version: 2019_05_08_181949) do
   create_table "platforms", force: :cascade do |t|
     t.string "type"
     t.string "code"
+    t.string "name"
     t.string "alt_code"
     t.float "lat"
     t.float "lon"
-    t.bigint "itinerary_id"
+    t.datetime "arrivals_updated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["itinerary_id"], name: "index_platforms_on_itinerary_id"
   end
 
   add_foreign_key "addresses", "platforms"
-  add_foreign_key "arrivals", "itineraries"
+  add_foreign_key "arrivals", "platforms"
+  add_foreign_key "itineraries", "platforms"
   add_foreign_key "lines", "platforms"
-  add_foreign_key "platforms", "itineraries"
 end

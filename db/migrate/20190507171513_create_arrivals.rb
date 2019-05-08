@@ -6,7 +6,7 @@ class CreateArrivals < ActiveRecord::Migration[5.2]
       t.string :destination_name
       t.string :line
       t.string :minutes
-      t.references :itinerary, foreign_key: true
+      t.references :platform, foreign_key: true
 
       t.timestamps
     end

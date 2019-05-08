@@ -3,10 +3,11 @@ class CreatePlatforms < ActiveRecord::Migration[5.2]
     create_table :platforms do |t|
       t.string :type
       t.string :code
+      t.string :name
       t.string :alt_code
       t.float :lat
       t.float :lon
-      t.references :itinerary, foreign_key: true
+      t.datetime :arrivals_updated
 
       t.timestamps
     end
