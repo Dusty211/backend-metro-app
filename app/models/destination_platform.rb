@@ -1,0 +1,2 @@
+class DestinationPlatform < Platform
+end

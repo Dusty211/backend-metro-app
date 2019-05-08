@@ -1,0 +1,2 @@
+class SourcePlatform < Platform
+end
