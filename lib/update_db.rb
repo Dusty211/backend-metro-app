@@ -50,7 +50,7 @@ class UpdateDb
 
   def self.seed_source_platforms_addresses_relate_lines
     platforms_clone = all_platforms.clone
-    all_platforms.each do |platform|
+    platforms_clone.each do |platform|
       new_platform = SourcePlatform.create(
         code: platform["Code"],
         name: platform["Name"],
@@ -65,7 +65,25 @@ class UpdateDb
         zip: platform["Address"]["Zip"]
       )
       new_platform.address = platform_address
-      byebug
+      lines = []
+      [1,2,3,4].each do |i|
+        #shovel existing line colors into variable
+        platform["LineCode#{i}"] && lines << platform["LineCode#{i}"]
+      end
+      #if station has multiple platforms
+      if platform["StationTogether1"] != ""
+        alt_platform = platforms_clone.find do |cloned|
+          cloned["Code"] == platform["StationTogether1"]
+        end
+        [1,2,3,4].each do |i|
+          #shovel existing line colors from second platform into variable
+          alt_platform["LineCode#{i}"] && lines << alt_platform["LineCode#{i}"]
+        end
+      end
+      lines.sort!
+      lines.each do |line|
+        new_platform.lines << Line.find_by(code: line)
+      end
     end
   end
 
