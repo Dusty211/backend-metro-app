@@ -26,9 +26,23 @@ class UpdateDb
     self.to_station_name(@destination)
   end
 
+  # def self.seed_itineraries
+  #   all_itinerary_data.each do |itinerary|
+  #     byebug
+  #     Itinerary.create(source_code: itinerary["SourceStation"], destination_code: itinerary["DestinationStation"], miles: itinerary["CompositeMiles"], time: itinerary["RailTime"], peak_fare: itinerary["RailFare"]["PeakTime"], off_peak_fare: itinerary["RailFare"]["OffPeakTime"], senior_fare: itinerary["RailFare"]["SeniorDisabled"])
+  #   end
+  # end
+
   def self.seed_source_platforms
     all_platforms.each do |platform|
       # byebug
+      SourcePlatform.create(
+        code: platform["Code"],
+        name: platform["Name"],
+        alt_code: platform["StationTogether1"],
+        lat: platform["Lat"],
+        lon: platform["Lon"]
+      )
     end
   end
 
