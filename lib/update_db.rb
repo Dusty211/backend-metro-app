@@ -12,10 +12,6 @@ class UpdateDb
   def test_arrivals
     return_data(arrivals_url)
   end
-  #return_data is now a class method
-  def itinerary_data
-    return_data(itinerary_url)
-  end
 
   #won't work now because StationConverter is extended instead of included
   def source_name
@@ -25,13 +21,6 @@ class UpdateDb
   def destination_name
     self.to_station_name(@destination)
   end
-
-  # def self.seed_itineraries
-  #   all_itinerary_data.each do |itinerary|
-  #     byebug
-  #     Itinerary.create(source_code: itinerary["SourceStation"], destination_code: itinerary["DestinationStation"], miles: itinerary["CompositeMiles"], time: itinerary["RailTime"], peak_fare: itinerary["RailFare"]["PeakTime"], off_peak_fare: itinerary["RailFare"]["OffPeakTime"], senior_fare: itinerary["RailFare"]["SeniorDisabled"])
-  #   end
-  # end
 
   def self.seed_lines
     lines = %w(GR BL SV RD OR YL)
@@ -48,16 +37,29 @@ class UpdateDb
     end
   end
 
-  def self.seed_source_platforms_addresses_relate_lines
+  def self.seed_platforms_addresses_relate_lines(source_or_destination_str)
     platforms_clone = all_platforms.clone
     platforms_clone.each do |platform|
-      new_platform = SourcePlatform.create(
-        code: platform["Code"],
-        name: platform["Name"],
-        alt_code: platform["StationTogether1"],
-        lat: platform["Lat"],
-        lon: platform["Lon"]
-      )
+      case source_or_destination_str
+        when "source"
+          new_platform = SourcePlatform.create(
+            code: platform["Code"],
+            name: platform["Name"],
+            alt_code: platform["StationTogether1"],
+            lat: platform["Lat"],
+            lon: platform["Lon"]
+          )
+        when "destination"
+          new_platform = DestinationPlatform.create(
+            code: platform["Code"],
+            name: platform["Name"],
+            alt_code: platform["StationTogether1"],
+            lat: platform["Lat"],
+            lon: platform["Lon"]
+          )
+        else
+          return "Please enter the string 'source' or 'destination' for an argument."
+      end
       platform_address = Address.create(
         street: platform["Address"]["Street"],
         city: platform["Address"]["City"],
@@ -67,16 +69,17 @@ class UpdateDb
       new_platform.address = platform_address
       lines = []
       [1,2,3,4].each do |i|
-        #shovel existing line colors into variable
+        #shovel existing line colors into lines variable
         platform["LineCode#{i}"] && lines << platform["LineCode#{i}"]
       end
       #if station has multiple platforms
       if platform["StationTogether1"] != ""
+        #find alt platform and store in variable
         alt_platform = platforms_clone.find do |cloned|
           cloned["Code"] == platform["StationTogether1"]
         end
         [1,2,3,4].each do |i|
-          #shovel existing line colors from second platform into variable
+          #shovel existing line colors from second platform into lines variable
           alt_platform["LineCode#{i}"] && lines << alt_platform["LineCode#{i}"]
         end
       end
@@ -86,16 +89,7 @@ class UpdateDb
       end
     end
   end
-
-
-  # Dev use:
-  # def print_converter
-  #   output = {}
-  #     return_data(stations_url)["Stations"].each do |station|
-  #       output.merge!("#{station["Name"]}" => "#{station["Code"]}")
-  #     end
-  #   return output
-  # end
+  
 
   private
 
@@ -105,10 +99,6 @@ class UpdateDb
 
   def arrivals_url
     return "https://api.wmata.com/StationPrediction.svc/json/GetPrediction/#{@source}?api_key=#{api_key}"
-  end
-
-  def itinerary_url
-    return "https://api.wmata.com/Rail.svc/json/jSrcStationToDstStationInfo?api_key=#{api_key}&FromStationCode=#{@source}&ToStationCode=#{@destination}"
   end
 
   #Dev use:
