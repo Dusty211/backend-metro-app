@@ -28,7 +28,7 @@ class UpdateDb
 
   def self.seed_source_platforms
     all_platforms.each do |platform|
-      byebug
+      # byebug
     end
   end
 

@@ -1,3 +1,3 @@
 class Line < ApplicationRecord
-  belongs_to :platform
+  has_many :platforms, through: :platform_lines
 end
