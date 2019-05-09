@@ -33,7 +33,23 @@ class UpdateDb
   #   end
   # end
 
-  def self.seed_source_platforms
+  def self.seed_lines
+    lines = %w(GR BL SV RD OR YL)
+    color = {
+      "GR" => "green",
+      "BL" => "blue",
+      "SV" => "silver",
+      "RD" => "red",
+      "OR" => "blue",
+      "YL" => "yellow"
+     }
+    lines.each do |line|
+      Line.create(code: line, color: color[line])
+    end
+  end
+
+  def self.seed_source_platforms_addresses_relate_lines
+    platforms_clone = all_platforms.clone
     all_platforms.each do |platform|
       new_platform = SourcePlatform.create(
         code: platform["Code"],
@@ -49,6 +65,7 @@ class UpdateDb
         zip: platform["Address"]["Zip"]
       )
       new_platform.address = platform_address
+      byebug
     end
   end
 
