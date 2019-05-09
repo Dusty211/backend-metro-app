@@ -35,14 +35,20 @@ class UpdateDb
 
   def self.seed_source_platforms
     all_platforms.each do |platform|
-      # byebug
-      SourcePlatform.create(
+      new_platform = SourcePlatform.create(
         code: platform["Code"],
         name: platform["Name"],
         alt_code: platform["StationTogether1"],
         lat: platform["Lat"],
         lon: platform["Lon"]
       )
+      platform_address = Address.create(
+        street: platform["Address"]["Street"],
+        city: platform["Address"]["City"],
+        state: platform["Address"]["State"],
+        zip: platform["Address"]["Zip"]
+      )
+      new_platform.address = platform_address
     end
   end
 
