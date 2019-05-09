@@ -84,12 +84,13 @@ class UpdateDb
         end
       end
       lines.sort!
+      #associate correct lines with the created db platform
       lines.each do |line|
         new_platform.lines << Line.find_by(code: line)
       end
     end
   end
-  
+
 
   private
 
