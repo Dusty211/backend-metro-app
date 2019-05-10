@@ -91,10 +91,27 @@ class UpdateDb
     end
   end
 
+  # def self.seed_itineraries
+  #   itineraries_clone = all_itinerary_data.clone
+  #     itineraries_clone.each do |itinerary|
+  #       SourcePlatform.find_by(code: itinerary["SourceStation"]).itineraries << Itinerary.create(
+  #         source_code: itinerary["SourceStation"],
+  #         destination_code: itinerary["DestinationStation"],
+  #         miles: itinerary["CompositeMiles"],
+  #         time: itinerary["RailTime"],
+  #         peak_fare: itinerary["RailFare"]["PeakTime"],
+  #         off_peak_fare: itinerary["RailFare"]["OffPeakTime"],
+  #         senior_fare: itinerary["RailFare"]["SeniorDisabled"]
+  #       )
+  #       new_itinerary = Itinerary.find_by(source_code: itinerary["SourceStation"])
+  #       DestinationPlatform.find_by(code: itinerary["DestinationStation"]).itineraries << new_itinerary
+  #     end
+  # end
+
   def self.seed_itineraries
     itineraries_clone = all_itinerary_data.clone
       itineraries_clone.each do |itinerary|
-        SourcePlatform.find_by(code: itinerary["SourceStation"]).itineraries << Itinerary.create(
+        new_itinerary = Itinerary.create(
           source_code: itinerary["SourceStation"],
           destination_code: itinerary["DestinationStation"],
           miles: itinerary["CompositeMiles"],
@@ -103,7 +120,7 @@ class UpdateDb
           off_peak_fare: itinerary["RailFare"]["OffPeakTime"],
           senior_fare: itinerary["RailFare"]["SeniorDisabled"]
         )
-        new_itinerary = Itinerary.find_by(source_code: itinerary["SourceStation"])
+        SourcePlatform.find_by(code: itinerary["SourceStation"]).itineraries << new_itinerary
         DestinationPlatform.find_by(code: itinerary["DestinationStation"]).itineraries << new_itinerary
       end
   end
