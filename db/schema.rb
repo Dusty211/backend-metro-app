@@ -46,10 +46,8 @@ ActiveRecord::Schema.define(version: 2019_05_09_003548) do
     t.float "peak_fare"
     t.float "off_peak_fare"
     t.float "senior_fare"
-    t.bigint "platform_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["platform_id"], name: "index_itineraries_on_platform_id"
   end
 
   create_table "lines", force: :cascade do |t|
@@ -57,6 +55,15 @@ ActiveRecord::Schema.define(version: 2019_05_09_003548) do
     t.string "code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "platform_itineraries", force: :cascade do |t|
+    t.bigint "platform_id"
+    t.bigint "itinerary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["itinerary_id"], name: "index_platform_itineraries_on_itinerary_id"
+    t.index ["platform_id"], name: "index_platform_itineraries_on_platform_id"
   end
 
   create_table "platform_lines", force: :cascade do |t|
@@ -82,7 +89,8 @@ ActiveRecord::Schema.define(version: 2019_05_09_003548) do
 
   add_foreign_key "addresses", "platforms"
   add_foreign_key "arrivals", "platforms"
-  add_foreign_key "itineraries", "platforms"
+  add_foreign_key "platform_itineraries", "itineraries"
+  add_foreign_key "platform_itineraries", "platforms"
   add_foreign_key "platform_lines", "lines"
   add_foreign_key "platform_lines", "platforms"
 end

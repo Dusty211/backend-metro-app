@@ -1,3 +1,4 @@
 class Itinerary < ApplicationRecord
-  belongs_to :platform
+  has_many :platform_itineraries
+  has_many :platforms, through: :platform_itineraries
 end
