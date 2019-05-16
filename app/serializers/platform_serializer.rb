@@ -1,5 +1,5 @@
 class PlatformSerializer < ActiveModel::Serializer
-  attributes :code, :name, :alt_code, :lat, :lon, :address, :lines
+  attributes :id, :code, :name, :alt_code, :lat, :lon, :address, :lines
 
   def address
     {street: self.object.address.street,
