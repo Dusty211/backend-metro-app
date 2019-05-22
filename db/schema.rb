@@ -31,8 +31,10 @@ ActiveRecord::Schema.define(version: 2019_05_22_182140) do
     t.string "destination"
     t.string "line"
     t.string "minutes"
+    t.bigint "platform_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["platform_id"], name: "index_arrivals_on_platform_id"
   end
 
   create_table "itineraries", force: :cascade do |t|
@@ -79,11 +81,13 @@ ActiveRecord::Schema.define(version: 2019_05_22_182140) do
     t.string "alt_code"
     t.float "lat"
     t.float "lon"
+    t.datetime "arrivals_updated"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   add_foreign_key "addresses", "platforms"
+  add_foreign_key "arrivals", "platforms"
   add_foreign_key "platform_itineraries", "itineraries"
   add_foreign_key "platform_itineraries", "platforms"
   add_foreign_key "platform_lines", "lines"

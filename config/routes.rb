@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get 'platforms/source', to: 'platforms#source'
       get 'platforms/destination', to: 'platforms#destination'
       get 'itineraries/find', to: 'itineraries#find'
+      get 'arrivals/find', to: 'arrivals#find'
     end
   end
 end

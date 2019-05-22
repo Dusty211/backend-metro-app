@@ -5,6 +5,7 @@ class CreateArrivals < ActiveRecord::Migration[5.2]
       t.string :destination
       t.string :line
       t.string :minutes
+      t.references :platform, foreign_key: true
 
       t.timestamps
     end

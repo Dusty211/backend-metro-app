@@ -7,6 +7,7 @@ class CreatePlatforms < ActiveRecord::Migration[5.2]
       t.string :alt_code
       t.float :lat
       t.float :lon
+      t.datetime :arrivals_updated
 
       t.timestamps
     end

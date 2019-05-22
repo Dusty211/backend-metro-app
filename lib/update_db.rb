@@ -1,25 +1,9 @@
-require 'station_converter'
 
 class UpdateDb
-
-  extend StationConverter
 
   def initialize(source_code, destination_code)
     @source = source_code
     @destination = destination_code
-  end
-  #return_data is now a class method
-  def test_arrivals
-    return_data(arrivals_url)
-  end
-
-  #won't work now because StationConverter is extended instead of included
-  def source_name
-    self.to_station_name(@source)
-  end
-  #won't work now because StationConverter is extended instead of included
-  def destination_name
-    self.to_station_name(@destination)
   end
 
   def self.seed_lines
@@ -91,23 +75,6 @@ class UpdateDb
     end
   end
 
-  # def self.seed_itineraries
-  #   itineraries_clone = all_itinerary_data.clone
-  #     itineraries_clone.each do |itinerary|
-  #       SourcePlatform.find_by(code: itinerary["SourceStation"]).itineraries << Itinerary.create(
-  #         source_code: itinerary["SourceStation"],
-  #         destination_code: itinerary["DestinationStation"],
-  #         miles: itinerary["CompositeMiles"],
-  #         time: itinerary["RailTime"],
-  #         peak_fare: itinerary["RailFare"]["PeakTime"],
-  #         off_peak_fare: itinerary["RailFare"]["OffPeakTime"],
-  #         senior_fare: itinerary["RailFare"]["SeniorDisabled"]
-  #       )
-  #       new_itinerary = Itinerary.find_by(source_code: itinerary["SourceStation"])
-  #       DestinationPlatform.find_by(code: itinerary["DestinationStation"]).itineraries << new_itinerary
-  #     end
-  # end
-
   def self.seed_itineraries
     itineraries_clone = all_itinerary_data.clone
       itineraries_clone.each do |itinerary|
@@ -126,17 +93,22 @@ class UpdateDb
   end
 
 
+  def self.arrivals_data(code)
+    return_data(arrivals_url(code))["Trains"]
+  end
+
+
   private
 
   def self.api_key
     return Rails.application.credentials.wmata[:primary_key]
   end
 
-  def arrivals_url
-    return "https://api.wmata.com/StationPrediction.svc/json/GetPrediction/#{@source}?api_key=#{api_key}"
+  def self.arrivals_url(code)
+    return "https://api.wmata.com/StationPrediction.svc/json/GetPrediction/#{code}?api_key=#{api_key}"
   end
 
-  #Dev use:
+  #Dev use (seeds.rb):
   def self.all_itinerary_url
     return "https://api.wmata.com/Rail.svc/json/jSrcStationToDstStationInfo?api_key=#{api_key}"
   end
