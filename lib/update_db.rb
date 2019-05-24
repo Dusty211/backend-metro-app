@@ -13,7 +13,7 @@ class UpdateDb
       "BL" => "blue",
       "SV" => "silver",
       "RD" => "red",
-      "OR" => "blue",
+      "OR" => "orange",
       "YL" => "yellow"
      }
     lines.each do |line|
