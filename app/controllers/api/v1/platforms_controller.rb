@@ -1,11 +1,7 @@
 class Api::V1::PlatformsController < ApplicationController
 
-  def source
+  def index
     render json: Platform.all
   end
-
-  # def destination
-  #   render json: DestinationPlatform.all
-  # end
 
 end
