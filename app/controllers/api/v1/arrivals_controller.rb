@@ -3,8 +3,8 @@ require 'update_db'
 class Api::V1::ArrivalsController < ApplicationController
 
   def find
-    station = SourcePlatform.find_by(code: params["code"])
-    alt_station = SourcePlatform.find_by(code: station.alt_code)
+    station = Platform.find_by(code: params["code"])
+    alt_station = Platform.find_by(code: station.alt_code)
     if alt_station
       handle_arrivals_request(station)
       handle_arrivals_request(alt_station)

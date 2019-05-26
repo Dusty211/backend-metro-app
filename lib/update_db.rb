@@ -21,29 +21,16 @@ class UpdateDb
     end
   end
 
-  def self.seed_platforms_addresses_associate_lines(source_or_destination_str)
+  def self.seed_platforms_addresses_associate_lines
     platforms_clone = all_platforms.clone
     platforms_clone.each do |platform|
-      case source_or_destination_str
-        when "source"
-          new_platform = SourcePlatform.create(
-            code: platform["Code"],
-            name: platform["Name"],
-            alt_code: platform["StationTogether1"],
-            lat: platform["Lat"],
-            lon: platform["Lon"]
-          )
-        when "destination"
-          new_platform = DestinationPlatform.create(
-            code: platform["Code"],
-            name: platform["Name"],
-            alt_code: platform["StationTogether1"],
-            lat: platform["Lat"],
-            lon: platform["Lon"]
-          )
-        else
-          return "Please enter the string 'source' or 'destination' for an argument."
-      end
+        new_platform = Platform.create(
+          code: platform["Code"],
+          name: platform["Name"],
+          alt_code: platform["StationTogether1"],
+          lat: platform["Lat"],
+          lon: platform["Lon"]
+        )
       platform_address = Address.create(
         street: platform["Address"]["Street"],
         city: platform["Address"]["City"],
@@ -87,8 +74,6 @@ class UpdateDb
           off_peak_fare: itinerary["RailFare"]["OffPeakTime"],
           senior_fare: itinerary["RailFare"]["SeniorDisabled"]
         )
-        SourcePlatform.find_by(code: itinerary["SourceStation"]).itineraries << new_itinerary
-        DestinationPlatform.find_by(code: itinerary["DestinationStation"]).itineraries << new_itinerary
       end
   end
 
