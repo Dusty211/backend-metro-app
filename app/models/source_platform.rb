@@ -1,2 +1,0 @@
-class SourcePlatform < Platform
-end

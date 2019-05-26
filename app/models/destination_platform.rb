@@ -1,2 +1,0 @@
-class DestinationPlatform < Platform
-end
