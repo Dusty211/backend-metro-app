@@ -11,7 +11,8 @@ class PlatformSerializer < ActiveModel::Serializer
 
   def lines
     self.object.lines.map do |line|
-      {color: line.color,
+      { id: line.id,
+        color: line.color,
        code: line.code
      }
     end

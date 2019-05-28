@@ -8,10 +8,23 @@ class Api::V1::ArrivalsController < ApplicationController
     if alt_station
       handle_arrivals_request(station)
       handle_arrivals_request(alt_station)
-      render json: Arrival.where(platform_id: [station.id, alt_station.id])
+      render json: [
+        {
+          platform_id: station.id,
+          platform_arrivals: Arrival.where(platform_id: station.id)
+        }, {
+          platform_id: alt_station.id,
+          platform_arrivals: Arrival.where(platform_id: alt_station.id)
+        }
+      ]
     else
       handle_arrivals_request(station)
-      render json: Arrival.where(platform_id: station.id)
+      render json: [
+        {
+          platform_id: station.id,
+          platform_arrivals: Arrival.where(platform_id: station.id)
+        }
+      ]
     end
 
   end
