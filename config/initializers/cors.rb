@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'simpleafmetro.com:443','www.simpleafmetro.com:443'
+    origins 'https://simpleafmetro.com:443','https://www.simpleafmetro.com:443'
 
     resource '*',
       headers: :any,
