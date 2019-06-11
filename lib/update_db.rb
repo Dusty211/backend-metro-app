@@ -82,6 +82,10 @@ class UpdateDb
     return_data(arrivals_url(code))["Trains"]
   end
 
+  def self.incidents_data
+    return_data(incidents_url)["Incidents"]
+  end
+
 
   private
 
@@ -91,6 +95,10 @@ class UpdateDb
 
   def self.arrivals_url(code)
     return "https://api.wmata.com/StationPrediction.svc/json/GetPrediction/#{code}?api_key=#{api_key}"
+  end
+
+  def self.incidents_url
+    return "https://api.wmata.com/Incidents.svc/json/Incidents?api_key=#{api_key}"
   end
 
   #Dev use (seeds.rb):
