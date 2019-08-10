@@ -1,6 +1,7 @@
 
 require 'update_db'
 
+#hardcoded in UpdateDb - does not use WMATA API data
 UpdateDb.seed_lines
 puts "=> Seeded lines"
 
