@@ -1,13 +1,10 @@
 
 #This file contains the class used for programmatically seeding or re-seeding the database with the WMATA API.
-#It also contains several methods used by the controller to retrieve updated arrivals data and alerts from WMATA's API.
+#It also contains several methods used by the controllers to retrieve updated arrivals data and alerts from WMATA's API.
 
 class UpdateDb
 
-  def initialize(source_code, destination_code) #Not needed currently
-    @source = source_code
-    @destination = destination_code
-  end
+  # .initialize not needed
 
   def self.seed_lines
     lines = %w(GR BL SV RD OR YL) ##All WMATA lines that exist
@@ -66,10 +63,10 @@ class UpdateDb
     end
   end
 
-  def self.seed_itineraries
+  def self.seed_itineraries #Fetch all routes from WMATA and write them to the db
     itineraries_clone = all_itinerary_data.clone
       itineraries_clone.each do |itinerary|
-        new_itinerary = Itinerary.create(
+        Itinerary.create(
           source_code: itinerary["SourceStation"],
           destination_code: itinerary["DestinationStation"],
           miles: itinerary["CompositeMiles"],
@@ -82,11 +79,11 @@ class UpdateDb
   end
 
 
-  def self.arrivals_data(code)
+  def self.arrivals_data(code) #Fetch live arrivals for platform code from WMATA
     return_data(arrivals_url(code))["Trains"]
   end
 
-  def self.incidents_data
+  def self.incidents_data #Fetch live incidents from WMATA
     return_data(incidents_url)["Incidents"]
   end
 
@@ -97,6 +94,7 @@ class UpdateDb
     return Rails.application.credentials.wmata[:primary_key]
   end
 
+  #Live updates
   def self.arrivals_url(code)
     return "https://api.wmata.com/StationPrediction.svc/json/GetPrediction/#{code}?api_key=#{api_key}"
   end
@@ -104,6 +102,7 @@ class UpdateDb
   def self.incidents_url
     return "https://api.wmata.com/Incidents.svc/json/Incidents?api_key=#{api_key}"
   end
+  #######
 
   #Dev use (seeds.rb):
   def self.all_itinerary_url
@@ -121,8 +120,7 @@ class UpdateDb
   def self.all_platforms
     return_data(stations_url)["Stations"]
   end
-
-  ##########
+  #######
 
 
   def self.return_data(url)
