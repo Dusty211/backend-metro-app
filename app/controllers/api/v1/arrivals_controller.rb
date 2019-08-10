@@ -3,11 +3,11 @@ require 'update_db'
 class Api::V1::ArrivalsController < ApplicationController
 
   def find
-    station = Platform.find_by(code: params["code"])
-    alt_station = Platform.find_by(code: station.alt_code)
-    if alt_station
-      handle_arrivals_request(station)
-      handle_arrivals_request(alt_station)
+    station = Platform.find_by(code: params["code"]) #takes the one URL param
+    alt_station = Platform.find_by(code: station.alt_code) #Only some Platforms have "alt_code"
+    if alt_station #true if station has an "alt_code"
+      handle_arrivals_request(station) #platform1
+      handle_arrivals_request(alt_station) #platform2
       render json: [
         {
           platform_id: station.id,
@@ -17,7 +17,7 @@ class Api::V1::ArrivalsController < ApplicationController
           platform_arrivals: Arrival.where(platform_id: alt_station.id)
         }
       ]
-    else
+    else #if the station only has one platform
       handle_arrivals_request(station)
       render json: [
         {
@@ -35,11 +35,11 @@ class Api::V1::ArrivalsController < ApplicationController
     params.permit(:code)
   end
 
-  def handle_arrivals_request(station)
+  def handle_arrivals_request(station) #Returns data < 20sec old, or fetches new data
 
     puts "$$$$$$$$$$$$$$$$$ STATION:#{station.code}"
 
-    def update_arrivals(station)
+    def update_arrivals(station) #Only runs if data is < 20sec or non-existant
       color = {
         "GR" => "green",
         "BL" => "blue",
@@ -60,16 +60,17 @@ class Api::V1::ArrivalsController < ApplicationController
       station.update!(arrivals_updated: DateTime.now)
     end
 
-    if !station.arrivals_updated
+    if !station.arrivals_updated #Checks to see if there is anything in
+                                 #the "arrivals_updated" column of this Platform
       update_arrivals(station)
       puts "/////////////////////////////////NEVER BEEN UPDATED"
       return station.arrivals
-    elsif DateTime.now.to_time - station.arrivals_updated.to_time > 20
+    elsif DateTime.now.to_time - station.arrivals_updated.to_time > 20 #Not fresh data?
       station.arrivals.destroy_all
       update_arrivals(station)
       puts "/////////////////////////////////OVER 20 SECONDS OLD"
       return station.arrivals
-    else
+    else #Data is less than 20 sec old
       puts "/////////////////////////////////FRESH ARRIVALS"
       return station.arrivals
     end

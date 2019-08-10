@@ -4,6 +4,8 @@ class Api::V1::IncidentsController < ApplicationController
 
   def index
     update_incidents_if_necessary
+    #IncidentUpdate is only the timestamp that "has many" Incidents
+    #There should only be one IncidentUpdate. Render Incidents from this IncidentUpdate
     render json: IncidentUpdate.last.incidents
   end
 
@@ -12,6 +14,7 @@ class Api::V1::IncidentsController < ApplicationController
   def update_incidents_if_necessary
     def incidents_need_update?
       #returns true if incidents don't exist, or if they are too old.
+      #If the first condition is true, the second condition doesn't error because it never gets reached.
       return !!(IncidentUpdate.count == 0) || (DateTime.now.to_time - IncidentUpdate.last.created_at.to_time > 60)
     end
 
@@ -20,6 +23,7 @@ class Api::V1::IncidentsController < ApplicationController
       IncidentUpdate.all.destroy_all
       new_incident_update = IncidentUpdate.create()
 
+      #Fetch fresh incidents and belong them to IncidentUpdate
       UpdateDb.incidents_data.each do |incident|
         new_incident = Incident.create(
           description: incident["Description"],
