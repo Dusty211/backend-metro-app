@@ -67,6 +67,12 @@ end
 ```
 
 ## Development Environment Installation
+
+#### Prerequisites:
+- Working Ruby installation with the ability to run the correct version
+- Ruby on Rails gem
+- PostgreSQL server configured and running
+
 #### Fork and clone the repo.
 
 #### Install all packages with bundle:
