@@ -72,6 +72,11 @@ end
 - Working Ruby installation with the ability to run the correct version
 - Ruby on Rails gem
 - PostgreSQL server configured and running
+- Ruby v2.6.3
+- Rails v5.2.3
+- rvm v1.29.7 (latest)
+- PostgreSQL v11.4
+
 
 #### Fork and clone the repo.
 
